@@ -1,0 +1,30 @@
+﻿<Window x:Class="DatingProgram.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatingProgram"
+        mc:Ignorable="d"
+        Title="Авторизация" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label Content="Приложение знакомств" FontWeight="ExtraBlack" FontSize="24" HorizontalAlignment="Center"/>
+
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0.5" BorderBrush="Black" CornerRadius="5">
+            <StackPanel>
+                
+                <StackPanel Margin="20 10 20 0">
+                    <TextBlock Text="Логин" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="tbLogin" FontSize="16" Margin="0 5"/>
+                </StackPanel>
+
+                <StackPanel Margin="20 0 20 10">
+                    <TextBlock Text="Пароль" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <PasswordBox x:Name="pbPassword" FontSize="16" Margin="0 5"/>
+                </StackPanel>
+
+                <Button x:Name="btSignIn" Content="Войти" FontSize="16" Width="150" Cursor="Hand" Click="btSignIn_Click"/>
+                <TextBlock Text="Нет аккаунта? Зарегистрироваться" FontSize="14" Foreground="Blue" TextDecorations="Underline" HorizontalAlignment="Center" Margin="10 10 10 10" Cursor="Hand" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
