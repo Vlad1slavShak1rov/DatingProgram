@@ -15,20 +15,24 @@
         <Grid Grid.Row="0" Background="Bisque">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <StackPanel>
-                    <Image Width="35" Height="35"/>
+                    <Image Width="35" Height="35" Source="/Resource/4360835.png"/>
                     <Label Content="Мой профиль" FontWeight="DemiBold"/>
                 </StackPanel>
 
                 <StackPanel Margin="20 0 20 0">
-                    <Image Width="35" Height="35"/>
+                    <Image Width="35" Height="35" Source="/Resource/158722.png"/>
                     <Label Content="К Анкетам" FontWeight="DemiBold"/>
                 </StackPanel>
 
                 <StackPanel>
-                    <Image Width="35" Height="35"/>
+                    <Image Width="35" Height="35" Source="/Resource/107822.png"/>
                     <Label Content="Уведомления" FontWeight="DemiBold"/>
                 </StackPanel>
             </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>
