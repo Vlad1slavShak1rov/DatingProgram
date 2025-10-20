@@ -1,5 +1,6 @@
 ﻿using DatingProgram.DB;
 using DatingProgram.Models;
+using DatingProgram.Windows;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -39,7 +40,9 @@ namespace DatingProgram
 
         private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            var singInWindow = new SignUpWindow();
+            singInWindow.Show();
+            this.Close();
         }
 
         private User? SignIn(string username, string password)

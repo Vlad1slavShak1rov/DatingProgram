@@ -1,0 +1,38 @@
+﻿<Window x:Class="DatingProgram.Windows.SignUpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatingProgram.Windows"
+        mc:Ignorable="d"
+        Title="Регистрация" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <TextBlock FontSize="24" HorizontalAlignment="Center" TextAlignment="Center">
+            <Run Text="Регистрация" FontWeight="ExtraBlack"/>
+            <LineBreak/>
+            <Run Text="Именно с этого места начинаются новые знакомства..." FontWeight="DemiBold"/>
+        </TextBlock>
+        
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0.5" BorderBrush="Black" CornerRadius="5" Width="250">
+            <StackPanel>
+                <StackPanel Margin="20 10 20 0">
+                    <TextBlock Text="Логин" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="tbLogin" FontSize="16" Margin="0 5"/>
+                </StackPanel>
+
+                <StackPanel Margin="20 0 20 10">
+                    <TextBlock Text="Пароль" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <PasswordBox x:Name="pbPassword" FontSize="16" Margin="0 5"/>
+                </StackPanel>
+
+                <StackPanel Margin="20 0 20 10">
+                    <TextBlock Text="Повторный пароль" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <PasswordBox x:Name="pbPassword2" FontSize="16" Margin="0 5"/>
+                </StackPanel>
+
+                <Button x:Name="btSignUp" Content="Зарегистрироваться" FontSize="16" Width="175" Click="btSignUp_Click"/>
+                <TextBlock Text="Вернуться к авторизации" FontSize="14" HorizontalAlignment="Center" Margin="0 10" Foreground="Blue" TextDecorations="Underline" Cursor="Hand" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
