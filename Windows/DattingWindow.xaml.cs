@@ -23,5 +23,21 @@ namespace DatingProgram.Windows
         {
             InitializeComponent();
         }
+
+        private void spMyProfile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("1");
+
+        }
+
+        private void spDatting_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("2");
+        }
+
+        private void spNotify_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("3");
+        }
     }
 }

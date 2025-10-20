@@ -34,8 +34,9 @@ namespace DatingProgram.Windows
             {
                 return;
             }
-            
-            //Показ окна входа
+
+            var appWin = new DattingWindow();
+            appWin.Show();
             this.Close();
 
         }

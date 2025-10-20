@@ -33,7 +33,8 @@ namespace DatingProgram
             var user = SignIn(login, password);
             if(user != null)
             {
-                //Показ окна профиля
+                var appWin = new DattingWindow();
+                appWin.Show();
                 this.Close();
             }
         }
