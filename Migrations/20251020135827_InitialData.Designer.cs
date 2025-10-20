@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingProgram.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20251020125622_AddNewEntity")]
-    partial class AddNewEntity
+    [Migration("20251020135827_InitialData")]
+    partial class InitialData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +72,8 @@ namespace DatingProgram.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CharacteristicId")
+                    b.Property<int?>("CharacteristicId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Contact")
@@ -83,7 +84,7 @@ namespace DatingProgram.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FormId")
+                    b.Property<int?>("FormId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -312,6 +313,10 @@ namespace DatingProgram.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AvatarPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -355,9 +360,7 @@ namespace DatingProgram.Migrations
 
                     b.HasOne("DatingProgram.Models.DatingForm", "DatingForm")
                         .WithMany("Clients")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FormId");
 
                     b.HasOne("DatingProgram.Models.User", "Users")
                         .WithMany("Clients")

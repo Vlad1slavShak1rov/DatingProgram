@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DatingProgram.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreated : Migration
+    public partial class InitialData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,6 +82,7 @@ namespace DatingProgram.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AvatarPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -102,7 +103,7 @@ namespace DatingProgram.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    FormId = table.Column<int>(type: "int", nullable: false),
+                    FormId = table.Column<int>(type: "int", nullable: true),
                     CharacteristicId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecondName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -122,8 +123,7 @@ namespace DatingProgram.Migrations
                         name: "FK_Client_DatingForms_FormId",
                         column: x => x.FormId,
                         principalTable: "DatingForms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Client_Users_UserId",
                         column: x => x.UserId,
@@ -204,6 +204,29 @@ namespace DatingProgram.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Client_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pairs",
                 columns: table => new
                 {
@@ -275,6 +298,11 @@ namespace DatingProgram.Migrations
                 column: "ToUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pairs_GirlId",
                 table: "Pairs",
                 column: "GirlId");
@@ -301,6 +329,9 @@ namespace DatingProgram.Migrations
 
             migrationBuilder.DropTable(
                 name: "Likes");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Pairs");

@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatingProgram.Windows"
         mc:Ignorable="d"
-        Title="Приложение Знакомство" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Приложение Знакомство"  d:DesignHeight="550" d:DesignWidth="800"
+        MinHeight="550"
+        MinWidth="800" WindowStartupLocation="CenterScreen">   
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -14,18 +16,18 @@
 
         <Grid Grid.Row="0" Background="Bisque">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <StackPanel x:Name="spMyProfile" Cursor="Hand" MouseLeftButtonDown="spMyProfile_MouseLeftButtonDown">
-                    <Image Width="35" Height="35" Source="/Resource/4360835.png"/>
+                <StackPanel x:Name="spMyProfile" Cursor="Hand" MouseLeftButtonDown="spMyProfile_MouseLeftButtonDown" VerticalAlignment="Center">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/4360835.png"/>
                     <Label Content="Мой профиль" FontWeight="DemiBold"/>
                 </StackPanel>
 
-                <StackPanel x:Name="spDatting" Margin="20 0 20 0" Cursor="Hand" MouseLeftButtonDown="spDatting_MouseLeftButtonDown">
-                    <Image Width="35" Height="35" Source="/Resource/158722.png"/>
+                <StackPanel x:Name="spDatting" Margin="20 0 20 0" Cursor="Hand" MouseLeftButtonDown="spDatting_MouseLeftButtonDown" VerticalAlignment="Center">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/158722.png"/>
                     <Label Content="К Анкетам" FontWeight="DemiBold"/>
                 </StackPanel>
 
-                <StackPanel x:Name="spNotify" Cursor="Hand" MouseLeftButtonDown="spNotify_MouseLeftButtonDown">
-                    <Image Width="35" Height="35" Source="/Resource/107822.png"/>
+                <StackPanel x:Name="spNotify" Cursor="Hand" MouseLeftButtonDown="spNotify_MouseLeftButtonDown" VerticalAlignment="Center">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/107822.png"/>
                     <Label Content="Уведомления" FontWeight="DemiBold"/>
                 </StackPanel>
             </StackPanel>

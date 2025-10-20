@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatingProgram.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,15 +20,17 @@ namespace DatingProgram.Windows
     /// </summary>
     public partial class DattingWindow : Window
     {
-        public DattingWindow()
+        private User User { get; set; }
+        public DattingWindow(User user)
         {
             InitializeComponent();
+
+            User = user;
         }
 
         private void spMyProfile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("1");
-
+            MainFrame.Navigate(new Pages.MyProfile(User));
         }
 
         private void spDatting_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

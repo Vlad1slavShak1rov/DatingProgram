@@ -69,11 +69,8 @@ namespace DatingProgram.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AvatarPath")
+                    b.Property<int?>("CharacteristicId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CharacteristicId")
                         .HasColumnType("int");
 
                     b.Property<string>("Contact")
@@ -84,7 +81,7 @@ namespace DatingProgram.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FormId")
+                    b.Property<int?>("FormId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -313,6 +310,10 @@ namespace DatingProgram.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AvatarPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -356,9 +357,7 @@ namespace DatingProgram.Migrations
 
                     b.HasOne("DatingProgram.Models.DatingForm", "DatingForm")
                         .WithMany("Clients")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FormId");
 
                     b.HasOne("DatingProgram.Models.User", "Users")
                         .WithMany("Clients")

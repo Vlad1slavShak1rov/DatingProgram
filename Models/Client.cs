@@ -16,7 +16,6 @@ namespace DatingProgram.Models
         public int UserId { get; set; }
         public int? FormId { get; set; }
         public int? CharacteristicId { get; set; }
-        public string AvatarPath { get; set; }  
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string LastName { get; set; }

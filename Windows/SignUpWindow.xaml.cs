@@ -35,7 +35,7 @@ namespace DatingProgram.Windows
                 return;
             }
 
-            var appWin = new DattingWindow();
+            var appWin = new DattingWindow(user);
             appWin.Show();
             this.Close();
 

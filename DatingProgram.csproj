@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="Resource\107822.png" />
     <None Remove="Resource\158722.png" />
+    <None Remove="Resource\1640528661_1-abrakadabra-fun-p-serii-chelovek-na-avu-1.png" />
     <None Remove="Resource\4360835.png" />
   </ItemGroup>
 
@@ -28,9 +29,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resource\107822.png" />
-    <Resource Include="Resource\158722.png" />
-    <Resource Include="Resource\4360835.png" />
+    <Resource Include="Resource\sysImages\107822.png" />
+    <Resource Include="Resource\sysImages\158722.png" />
+    <Resource Include="Resource\sysImages\1640528661_1-abrakadabra-fun-p-serii-chelovek-na-avu-1.png" />
+    <Resource Include="Resource\sysImages\4360835.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resource\otherPict\" />
   </ItemGroup>
 
 </Project>

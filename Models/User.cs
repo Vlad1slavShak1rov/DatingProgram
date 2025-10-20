@@ -14,6 +14,7 @@ namespace DatingProgram.Models
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public string AvatarPath { get; set; } = string.Empty;
         public int RoleId { get; set; }
 
         [ForeignKey("RoleId")]
