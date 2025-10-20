@@ -30,7 +30,6 @@ namespace DatingProgram.Models
         public virtual List<Pair> ManPairs { get; set; }
         public virtual List<Pair> WomanPairs { get; set; }
         public virtual List<Interest> Interests { get; set; }
-        public virtual List<DatingForm> DatingForms { get; set; }
         public virtual List<ClientPhoto> ClientPhotos { get; set; }
         public virtual List<Likes> FromClient { get; set; }
         public virtual List<Likes> ToClient { get; set; }

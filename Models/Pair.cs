@@ -14,11 +14,12 @@ namespace DatingProgram.Models
         public int Id { get; set; }
         public int ManId { get; set; }
         public int GirlId { get; set; }
+        public DateTime DateCreated { get; set; }
         public Enums.PairStatus PairStatus { get; set; }
 
         [ForeignKey("ManId")]
-        public virtual User Man { get; set; }
+        public virtual Client Man { get; set; }
         [ForeignKey("GirlId")]
-        public virtual User Women { get; set; }
+        public virtual Client Women { get; set; }
     }
 }

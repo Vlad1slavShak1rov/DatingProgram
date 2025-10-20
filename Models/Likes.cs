@@ -14,12 +14,12 @@ namespace DatingProgram.Models
         public int Id { get; set; }
         public int FromUserId { get; set; }
         public int ToUserId { get; set; }
-        public DateOnly Created { get; set; }
+        public DateTime Created { get; set; }
         public Enums.LikesStatus LikesStatus { get; set; }
 
         [ForeignKey("FromUserId")]
-        public virtual User FromUser { get; set; }
+        public virtual Client FromUser { get; set; }
         [ForeignKey("ToUserId")]
-        public virtual User ToUser { get; set; }
+        public virtual Client ToUser { get; set; }
     }
 }

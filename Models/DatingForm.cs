@@ -16,7 +16,7 @@ namespace DatingProgram.Models
         public string Description { get; set; }
         public string PurposeDating { get; set; }
         public Enums.Gender PreferredGender { get; set; }
-        public DateOnly DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
 
 
         public virtual List<Client> Clients { get; set; } = new();

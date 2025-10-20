@@ -13,7 +13,7 @@ namespace DatingProgram.Models
         public int Id { get; set; }
         public int ClientId { get; set; }
         public string Path { get; set; }
-        public DateOnly DateAdded { get; set; }
+        public DateTime DateAdded { get; set; }
 
         public virtual List<Client> Clients { get; set; } = new();
     }
