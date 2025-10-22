@@ -92,19 +92,21 @@ namespace DatingProgram.Windows
         // Переход на следующую страницу
         private void btRight_Click(object sender, RoutedEventArgs e)
         {
-            if(maxPageCounter != pageCounter)
-            {
-                pageCounter++;
-                SelectPage();
-            }
+            ChangedPage(1);
         }
 
         // Переход на предыдущую страницу
         private void btLeft_Click(object sender, RoutedEventArgs e)
         {
+            ChangedPage(-1);
+        }
+
+        // Изменение страницы (вперед/назад)
+        private void ChangedPage(int k )
+        {
             if (maxPageCounter != 0)
             {
-                pageCounter--;
+                pageCounter += 1 *k;
                 SelectPage();
             }
         }

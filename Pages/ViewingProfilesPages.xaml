@@ -1,0 +1,29 @@
+﻿<Page x:Class="DatingProgram.Pages.ViewingProfilesPages"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DatingProgram.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ViewingProfilesPages">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="0">
+            <StackPanel x:Name="spProfile"/>
+        </Grid>
+
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Button x:Name="btNextProfile" Content="Следующая анкета" Width="150" Height="30" Click="btNextProfile_Click"  />
+            </Grid>
+        </Border>
+    </Grid>
+    
+    
+</Page>

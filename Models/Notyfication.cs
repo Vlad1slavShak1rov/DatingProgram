@@ -17,7 +17,7 @@ namespace DatingProgram.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsRead { get; set; } = false;
 
-        [ForeignKey("UserId")]
+        [ForeignKey("ClientId")]
         public Client Client { get; set; }
     }
 }

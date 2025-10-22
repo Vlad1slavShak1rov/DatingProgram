@@ -173,15 +173,14 @@ namespace DatingProgram.Migrations
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsRead = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    IsRead = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notifications_Client_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Notifications_Client_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -254,9 +253,9 @@ namespace DatingProgram.Migrations
                 column: "ToUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notifications_UserId",
+                name: "IX_Notifications_ClientId",
                 table: "Notifications",
-                column: "UserId");
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pairs_GirlId",

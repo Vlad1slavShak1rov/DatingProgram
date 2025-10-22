@@ -35,7 +35,7 @@ namespace DatingProgram.Windows
 
         private void spDatting_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("2");
+            MainFrame.Navigate(new Pages.ViewingProfilesPages(User));
         }
 
         private void spNotify_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
