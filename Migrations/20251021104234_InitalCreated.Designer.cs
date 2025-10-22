@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingProgram.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20251020135827_InitialData")]
-    partial class InitialData
+    [Migration("20251021104234_InitalCreated")]
+    partial class InitalCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,9 +84,6 @@ namespace DatingProgram.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FormId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -101,8 +98,6 @@ namespace DatingProgram.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CharacteristicId");
-
-                    b.HasIndex("FormId");
 
                     b.HasIndex("UserId");
 
@@ -140,6 +135,9 @@ namespace DatingProgram.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -161,6 +159,8 @@ namespace DatingProgram.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("DatingForms");
                 });
@@ -358,10 +358,6 @@ namespace DatingProgram.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DatingProgram.Models.DatingForm", "DatingForm")
-                        .WithMany("Clients")
-                        .HasForeignKey("FormId");
-
                     b.HasOne("DatingProgram.Models.User", "Users")
                         .WithMany("Clients")
                         .HasForeignKey("UserId")
@@ -370,9 +366,18 @@ namespace DatingProgram.Migrations
 
                     b.Navigation("Characteristic");
 
-                    b.Navigation("DatingForm");
-
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("DatingProgram.Models.DatingForm", b =>
+                {
+                    b.HasOne("DatingProgram.Models.Client", "Client")
+                        .WithMany("DatingForm")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("DatingProgram.Models.Interest", b =>
@@ -453,6 +458,8 @@ namespace DatingProgram.Migrations
 
             modelBuilder.Entity("DatingProgram.Models.Client", b =>
                 {
+                    b.Navigation("DatingForm");
+
                     b.Navigation("FromClient");
 
                     b.Navigation("Interests");
@@ -464,11 +471,6 @@ namespace DatingProgram.Migrations
                     b.Navigation("ToClient");
 
                     b.Navigation("WomanPairs");
-                });
-
-            modelBuilder.Entity("DatingProgram.Models.DatingForm", b =>
-                {
-                    b.Navigation("Clients");
                 });
 
             modelBuilder.Entity("DatingProgram.Models.Role", b =>

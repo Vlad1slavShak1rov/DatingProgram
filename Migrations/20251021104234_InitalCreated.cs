@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DatingProgram.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialData : Migration
+    public partial class InitalCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,24 +41,6 @@ namespace DatingProgram.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClientPhotos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DatingForms",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MinAge = table.Column<int>(type: "int", nullable: false),
-                    MaxAge = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PurposeDating = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PreferredGender = table.Column<int>(type: "int", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DatingForms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,8 +85,7 @@ namespace DatingProgram.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    FormId = table.Column<int>(type: "int", nullable: true),
-                    CharacteristicId = table.Column<int>(type: "int", nullable: false),
+                    CharacteristicId = table.Column<int>(type: "int", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SecondName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -119,11 +100,6 @@ namespace DatingProgram.Migrations
                         principalTable: "Characteristics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Client_DatingForms_FormId",
-                        column: x => x.FormId,
-                        principalTable: "DatingForms",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Client_Users_UserId",
                         column: x => x.UserId,
@@ -151,6 +127,31 @@ namespace DatingProgram.Migrations
                     table.ForeignKey(
                         name: "FK_ClientClientPhoto_Client_ClientsId",
                         column: x => x.ClientsId,
+                        principalTable: "Client",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DatingForms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    MinAge = table.Column<int>(type: "int", nullable: false),
+                    MaxAge = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PurposeDating = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PreferredGender = table.Column<int>(type: "int", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DatingForms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DatingForms_Client_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -268,11 +269,6 @@ namespace DatingProgram.Migrations
                 column: "CharacteristicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Client_FormId",
-                table: "Client",
-                column: "FormId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Client_UserId",
                 table: "Client",
                 column: "UserId");
@@ -281,6 +277,11 @@ namespace DatingProgram.Migrations
                 name: "IX_ClientClientPhoto_ClientsId",
                 table: "ClientClientPhoto",
                 column: "ClientsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DatingForms_ClientId",
+                table: "DatingForms",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Interests_ClientId",
@@ -325,6 +326,9 @@ namespace DatingProgram.Migrations
                 name: "ClientClientPhoto");
 
             migrationBuilder.DropTable(
+                name: "DatingForms");
+
+            migrationBuilder.DropTable(
                 name: "Interests");
 
             migrationBuilder.DropTable(
@@ -344,9 +348,6 @@ namespace DatingProgram.Migrations
 
             migrationBuilder.DropTable(
                 name: "Characteristics");
-
-            migrationBuilder.DropTable(
-                name: "DatingForms");
 
             migrationBuilder.DropTable(
                 name: "Users");

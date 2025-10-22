@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Microsoft.Win32;
 using System.IO;
-using System.Windows;
+using DatingProgram.Windows;
 
 namespace DatingProgram.Pages
 {
@@ -26,15 +26,18 @@ namespace DatingProgram.Pages
     public partial class MyProfile : Page
     {
         public User User { get; set; }
+        public Client? Client { get; set; }
         public MyProfile(User user)
         {
             InitializeComponent();
             User = user;
-            if(user.AvatarPath != null)
+            if(user.AvatarPath != string.Empty)
             {
                 pcAvatar.Source = new BitmapImage(new Uri(user.AvatarPath));
             }
 
+            using var context = new MyDbContext();
+            Client = context.Client.FirstOrDefault(c => c.UserId == user.Id);
 
             DataContext = this;
         }
@@ -67,14 +70,85 @@ namespace DatingProgram.Pages
             MessageBox.Show("Успешно обновлено!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        //Кнопка Сохранить в разделе личной информации
         private void btSave_Click(object sender, RoutedEventArgs e)
         {
+            string firstName = tbName.Text;
+            string secondName = tbSurname.Text;
+            string lastName = tbLastName.Text;
+            string contact = tbPhoneNum.Text;
 
+            //Проверка на пустые поля
+            if (string.IsNullOrWhiteSpace(firstName) || 
+                string.IsNullOrWhiteSpace(secondName) || 
+                string.IsNullOrWhiteSpace(lastName) || 
+                string.IsNullOrWhiteSpace(contact))
+            {
+                MessageBox.Show("Поля не должны быть пустыми!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+
+            var context = new MyDbContext();
+            var client = context.Client.FirstOrDefault(c => c.UserId == User.Id);
+
+            //Если клиента нет, создается новый клиент
+            if (client == null)
+            {
+                client = new Client
+                {
+                    UserId = User.Id,
+                    FirstName = firstName,
+                    SecondName = secondName,
+                    LastName = lastName,
+                    Contact = contact
+                };
+
+
+                context.Client.Add(client);
+            }
+            else
+            {
+                client.FirstName = firstName;
+                client.SecondName = secondName;
+                client.LastName = lastName;
+                client.Contact = contact;
+                context.Client.Update(client);
+            }
+
+            context.SaveChanges();
+
+            MessageBox.Show("Успешно обновлено!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        //Событие нажатия кнопки Моя анкета
         private void btMyForm_Click(object sender, RoutedEventArgs e)
         {
+            /*
+            //Проверка на заполнение личной информации
+            if (Client is null)
+            {
+                MessageBox.Show("Сначала заполните личную информацию!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            //Подключение к БД и поиск анкеты клиента
+            using var context = new MyDbContext();
+            var form = context.DatingForms.FirstOrDefault(f => f.ClientId == Client.Id);
+
+            if(form is null)
+            {
+                MessageBox.Show("У вас не создана анкета. Сейчас вы будете перенаправлены на страницу создания анкеты.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                //запуск окна моя анкета
+            }
+            */
+
+            DattingFormWindow dattingFormWindow = new DattingFormWindow();
+            dattingFormWindow.ShowDialog();
+            
         }
 
         private void btChangePhoto_Click(object sender, RoutedEventArgs e)
