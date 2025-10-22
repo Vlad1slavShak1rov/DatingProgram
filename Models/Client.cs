@@ -13,7 +13,7 @@ namespace DatingProgram.Models
         [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
-        public int? CharacteristicId { get; set; }
+        public int? CharacteristicId { get; set; } = null;
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string LastName { get; set; }
@@ -23,10 +23,9 @@ namespace DatingProgram.Models
         public virtual User Users { get; set; }
         public virtual List<DatingForm> DatingForm { get; set; }
         [ForeignKey("CharacteristicId")]
-        public virtual Characteristic Characteristic { get; set; }
+        public virtual Characteristic? Characteristic { get; set; }
         public virtual List<Pair> ManPairs { get; set; }
         public virtual List<Pair> WomanPairs { get; set; }
-        public virtual List<Interest> Interests { get; set; }
         public virtual List<ClientPhoto> ClientPhotos { get; set; }
         public virtual List<Likes> FromClient { get; set; }
         public virtual List<Likes> ToClient { get; set; }

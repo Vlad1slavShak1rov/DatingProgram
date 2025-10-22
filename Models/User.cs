@@ -19,6 +19,6 @@ namespace DatingProgram.Models
 
         [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
-        public virtual List<Client> Clients { get; set; } = new(); 
+        public virtual List<Client> Clients { get; set; }
     }
 }

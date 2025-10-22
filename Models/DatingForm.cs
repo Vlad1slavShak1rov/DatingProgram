@@ -18,10 +18,9 @@ namespace DatingProgram.Models
         public int MaxAge { get; set; }
         public string Description { get; set; }
         public string PurposeDating { get; set; }
-        public Enums.Gender PreferredGender { get; set; }
         public DateTime DateCreated { get; set; }
 
         [ForeignKey("ClientId")]
-        public virtual Client Client { get; set; } = new();
+        public virtual Client Client { get; set; }
     }
 }

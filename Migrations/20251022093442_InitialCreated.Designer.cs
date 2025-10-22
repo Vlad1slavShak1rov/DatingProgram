@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingProgram.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20251021104234_InitalCreated")]
-    partial class InitalCreated
+    [Migration("20251022093442_InitialCreated")]
+    partial class InitialCreated
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace DatingProgram.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ClientClientPhoto", b =>
-                {
-                    b.Property<int>("ClientPhotosId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClientPhotosId", "ClientsId");
-
-                    b.HasIndex("ClientsId");
-
-                    b.ToTable("ClientClientPhoto");
-                });
 
             modelBuilder.Entity("DatingProgram.Models.Characteristic", b =>
                 {
@@ -73,7 +58,6 @@ namespace DatingProgram.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("CharacteristicId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Contact")
@@ -124,6 +108,8 @@ namespace DatingProgram.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.ToTable("ClientPhotos");
                 });
 
@@ -151,9 +137,6 @@ namespace DatingProgram.Migrations
                     b.Property<int>("MinAge")
                         .HasColumnType("int");
 
-                    b.Property<int>("PreferredGender")
-                        .HasColumnType("int");
-
                     b.Property<string>("PurposeDating")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -163,28 +146,6 @@ namespace DatingProgram.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("DatingForms");
-                });
-
-            modelBuilder.Entity("DatingProgram.Models.Interest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("Interests");
                 });
 
             modelBuilder.Entity("DatingProgram.Models.Likes", b =>
@@ -335,28 +296,11 @@ namespace DatingProgram.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ClientClientPhoto", b =>
-                {
-                    b.HasOne("DatingProgram.Models.ClientPhoto", null)
-                        .WithMany()
-                        .HasForeignKey("ClientPhotosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DatingProgram.Models.Client", null)
-                        .WithMany()
-                        .HasForeignKey("ClientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DatingProgram.Models.Client", b =>
                 {
                     b.HasOne("DatingProgram.Models.Characteristic", "Characteristic")
                         .WithMany("Clients")
-                        .HasForeignKey("CharacteristicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CharacteristicId");
 
                     b.HasOne("DatingProgram.Models.User", "Users")
                         .WithMany("Clients")
@@ -369,21 +313,21 @@ namespace DatingProgram.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("DatingProgram.Models.DatingForm", b =>
+            modelBuilder.Entity("DatingProgram.Models.ClientPhoto", b =>
                 {
-                    b.HasOne("DatingProgram.Models.Client", "Client")
-                        .WithMany("DatingForm")
+                    b.HasOne("DatingProgram.Models.Client", "Clients")
+                        .WithMany("ClientPhotos")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.Navigation("Clients");
                 });
 
-            modelBuilder.Entity("DatingProgram.Models.Interest", b =>
+            modelBuilder.Entity("DatingProgram.Models.DatingForm", b =>
                 {
                     b.HasOne("DatingProgram.Models.Client", "Client")
-                        .WithMany("Interests")
+                        .WithMany("DatingForm")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -458,11 +402,11 @@ namespace DatingProgram.Migrations
 
             modelBuilder.Entity("DatingProgram.Models.Client", b =>
                 {
+                    b.Navigation("ClientPhotos");
+
                     b.Navigation("DatingForm");
 
                     b.Navigation("FromClient");
-
-                    b.Navigation("Interests");
 
                     b.Navigation("ManPairs");
 

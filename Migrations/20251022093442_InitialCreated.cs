@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DatingProgram.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalCreated : Migration
+    public partial class InitialCreated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,21 +26,6 @@ namespace DatingProgram.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Characteristics", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClientPhotos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClientPhotos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,8 +83,7 @@ namespace DatingProgram.Migrations
                         name: "FK_Client_Characteristics_CharacteristicId",
                         column: x => x.CharacteristicId,
                         principalTable: "Characteristics",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Client_Users_UserId",
                         column: x => x.UserId,
@@ -109,24 +93,21 @@ namespace DatingProgram.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientClientPhoto",
+                name: "ClientPhotos",
                 columns: table => new
                 {
-                    ClientPhotosId = table.Column<int>(type: "int", nullable: false),
-                    ClientsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientClientPhoto", x => new { x.ClientPhotosId, x.ClientsId });
+                    table.PrimaryKey("PK_ClientPhotos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientClientPhoto_ClientPhotos_ClientPhotosId",
-                        column: x => x.ClientPhotosId,
-                        principalTable: "ClientPhotos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ClientClientPhoto_Client_ClientsId",
-                        column: x => x.ClientsId,
+                        name: "FK_ClientPhotos_Client_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -143,7 +124,6 @@ namespace DatingProgram.Migrations
                     MaxAge = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PurposeDating = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PreferredGender = table.Column<int>(type: "int", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -151,26 +131,6 @@ namespace DatingProgram.Migrations
                     table.PrimaryKey("PK_DatingForms", x => x.Id);
                     table.ForeignKey(
                         name: "FK_DatingForms_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Interests",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Interests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Interests_Client_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Client",
                         principalColumn: "Id",
@@ -274,18 +234,13 @@ namespace DatingProgram.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClientClientPhoto_ClientsId",
-                table: "ClientClientPhoto",
-                column: "ClientsId");
+                name: "IX_ClientPhotos_ClientId",
+                table: "ClientPhotos",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DatingForms_ClientId",
                 table: "DatingForms",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Interests_ClientId",
-                table: "Interests",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
@@ -323,13 +278,10 @@ namespace DatingProgram.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClientClientPhoto");
+                name: "ClientPhotos");
 
             migrationBuilder.DropTable(
                 name: "DatingForms");
-
-            migrationBuilder.DropTable(
-                name: "Interests");
 
             migrationBuilder.DropTable(
                 name: "Likes");
@@ -339,9 +291,6 @@ namespace DatingProgram.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pairs");
-
-            migrationBuilder.DropTable(
-                name: "ClientPhotos");
 
             migrationBuilder.DropTable(
                 name: "Client");

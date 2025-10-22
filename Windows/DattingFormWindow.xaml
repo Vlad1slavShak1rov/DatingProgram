@@ -12,22 +12,22 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel x:Name="spFirst" Margin="10" Visibility="Collapsed">
+        <StackPanel x:Name="spFirst" Margin="10" Visibility="Visible">
             <Label Content="Ваша анкета" HorizontalAlignment="Center" FontSize="20"/>
 
             <Label Content="Расскажите немного о себе" HorizontalAlignment="Center" FontSize="20"/>
 
             <Label Content="Возраст" FontSize="16"/>
-            <TextBox FontSize="16" Margin="5 0" Width="50" HorizontalAlignment="Left"/>
+            <TextBox x:Name="tbAge" Text="{Binding Characteristic.Age}" FontSize="16" Margin="5 0" Width="50" HorizontalAlignment="Left"/>
 
             <Label Content="Пол" FontSize="16" Margin="0 10 0 0"/>
             <StackPanel Orientation="Horizontal">
-                <RadioButton Tag="m" FontSize="16" Content="Мужской" Margin="5 0"/>
-                <RadioButton Tag="f" FontSize="16" Content="Женский"/>
+                <RadioButton x:Name="rbMale" Tag="m" FontSize="16" Content="Мужской" Margin="5 0" IsChecked="True" Checked="RadioButton_Checked"/>
+                <RadioButton x:Name="rbFemale" Tag="f" FontSize="16" Content="Женский" IsChecked="False"/>
             </StackPanel>
 
             <Label Content="Город" FontSize="16"/>
-            <TextBox FontSize="16" Margin="5 0" Width="250" HorizontalAlignment="Left"/>
+            <TextBox x:Name="tbCity" Text="{Binding Characteristic.City}" FontSize="16" Margin="5 0" Width="250" HorizontalAlignment="Left"/>
 
         </StackPanel>
 
@@ -37,45 +37,45 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel>
                     <Label Content="Минимальный возраст" FontSize="16"/>
-                    <TextBox Width="50"/>
+                    <TextBox x:Name="tbMinAge" Text="{Binding DatingForm.MinAge}" Width="50"/>
                 </StackPanel>
 
                 <StackPanel Margin="10 0">
                     <Label Content="Максимальный возраст" FontSize="16"/>
-                    <TextBox Width="50"/>
-                </StackPanel>
+                    <TextBox x:Name="tbMaxAge" Text="{Binding DatingForm.MaxAge}" Width="50"/>
+                </StackPanel> 
             </StackPanel>
 
             <TextBlock Text="Цель знакомства" FontSize="16" Margin="5 10 0 0"/>
-            <ComboBox SelectedIndex="0" FontSize="16" Margin="5 5" Width="150" HorizontalAlignment="Left">
+            <ComboBox x:Name="cbPurposeDating" SelectedIndex="0" FontSize="16" Margin="5 5" Width="150" HorizontalAlignment="Left">
                 <ComboBoxItem Content="Общение"/>
                 <ComboBoxItem Content="Дружба"/>
                 <ComboBoxItem Content="Отношения"/>
             </ComboBox>
 
             <TextBlock Text="Расскажите о себе" FontSize="16" Margin="5 10 0 0"/>
-            <TextBox Height="120" Margin="5" TextWrapping="Wrap"/>
+            <TextBox x:Name="tbAboutMe" Text="{Binding DatingForm.Description}" Height="120" Margin="5" TextWrapping="Wrap"/>
 
 
         </StackPanel>
 
         <Grid x:Name="spThird" Visibility="Collapsed">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="&lt;" FontSize="20" HorizontalAlignment="Left" Height="40" Margin="50"/>
-                <Image Width="200" Height="230"/>
-                <Button Content=">" FontSize="20" HorizontalAlignment="Right" Height="40" Margin="50"/>
+                <Button x:Name="btLeftImage" Content="&lt;" FontSize="20" HorizontalAlignment="Left" Height="40" Margin="50" Click="btLeftImage_Click"/>
+                <Image x:Name="myImage" Width="200" Height="230"/>
+                <Button x:Name="btRightImage" Content=">" FontSize="20" HorizontalAlignment="Right" Height="40" Margin="50" Click="btRightImage_Click"/>
             </StackPanel>
 
-            <TextBlock Text="0/0" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="16" Margin="5 30"/>
+            <TextBlock x:Name="tbCountImagePage" Text="0/0" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="16" Margin="5 30"/>
             <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal"  HorizontalAlignment="Center">
-                <Button Content="Добавить фото"  Margin="0 5" Width="170" FontSize="16"/>
-                <Button Content="Удалить" Margin=" 5" Width="170" FontSize="16"/>
+                <Button x:Name="btAddPhoto" Content="Добавить фото"  Margin="0 5" Width="170" FontSize="16" Click="btAddPhoto_Click"/>
+                <Button x:Name="btDeletePhoto" Content="Удалить" Margin=" 5" Width="170" FontSize="16" Click="btDeletePhoto_Click"/>
             </StackPanel>
            
         </Grid>
 
         <StackPanel Grid.Row="1">
-            <Button x:Name="btSave" Content="Сохранить" FontSize="16" Width="150" Margin="0 5"/>
+            <Button x:Name="btSave" Content="Сохранить" FontSize="16" Width="150" Margin="0 5" Click="btSave_Click"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10">
                 <Button x:Name="btLeft" Content="&lt;" FontSize="20" IsEnabled="False" Click="btLeft_Click"/>
                 <Button x:Name="btRight" Content=">" FontSize="20" Margin="10 0" Click="btRight_Click"/>

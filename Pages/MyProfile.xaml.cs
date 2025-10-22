@@ -1,8 +1,12 @@
 ﻿using DatingProgram.DB;
 using DatingProgram.Models;
+using DatingProgram.Windows;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.Logging;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +18,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.Win32;
-using System.IO;
-using DatingProgram.Windows;
 
 namespace DatingProgram.Pages
 {
@@ -37,7 +38,9 @@ namespace DatingProgram.Pages
             }
 
             using var context = new MyDbContext();
-            Client = context.Client.FirstOrDefault(c => c.UserId == user.Id);
+            Client = context.Client
+             .AsNoTracking()
+             .FirstOrDefault(c => c.UserId == user.Id);
 
             DataContext = this;
         }
@@ -66,7 +69,7 @@ namespace DatingProgram.Pages
             context.Users.Update(User);
             context.SaveChanges();
 
-            DataContext = User;
+            DataContext = this;
             MessageBox.Show("Успешно обновлено!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -116,6 +119,10 @@ namespace DatingProgram.Pages
                 context.Client.Update(client);
             }
 
+            Client = client;
+
+            DataContext = null;
+            DataContext = this;
             context.SaveChanges();
 
             MessageBox.Show("Успешно обновлено!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -124,7 +131,7 @@ namespace DatingProgram.Pages
         //Событие нажатия кнопки Моя анкета
         private void btMyForm_Click(object sender, RoutedEventArgs e)
         {
-            /*
+            
             //Проверка на заполнение личной информации
             if (Client is null)
             {
@@ -140,15 +147,9 @@ namespace DatingProgram.Pages
             {
                 MessageBox.Show("У вас не создана анкета. Сейчас вы будете перенаправлены на страницу создания анкеты.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            else
-            {
-                //запуск окна моя анкета
-            }
-            */
 
-            DattingFormWindow dattingFormWindow = new DattingFormWindow();
+            DattingFormWindow dattingFormWindow = new DattingFormWindow(Client);
             dattingFormWindow.ShowDialog();
-            
         }
 
         private void btChangePhoto_Click(object sender, RoutedEventArgs e)

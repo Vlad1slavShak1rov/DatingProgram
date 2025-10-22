@@ -20,11 +20,4 @@ namespace DatingProgram.Enums
         Семья,
         Расстались
     };
-
-    public enum Gender
-    {
-        Male,
-        Female
-    }
- 
 }

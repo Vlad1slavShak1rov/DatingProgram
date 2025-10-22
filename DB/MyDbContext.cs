@@ -22,7 +22,6 @@ namespace DatingProgram.DB
         public DbSet<Client> Client { get; set; }
         public DbSet<ClientPhoto> ClientPhotos { get; set; }
         public DbSet<DatingForm> DatingForms { get; set; }
-        public DbSet<Interest> Interests { get; set; }
         public DbSet<Likes> Likes { get; set; }
         public DbSet<Pair> Pairs { get; set; }
         public DbSet<Role> Roles { get; set; }

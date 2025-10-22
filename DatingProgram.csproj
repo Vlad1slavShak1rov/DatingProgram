@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resource\MyProfile_1\" />
     <Folder Include="Resource\otherPict\" />
   </ItemGroup>
 

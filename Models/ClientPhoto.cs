@@ -15,6 +15,6 @@ namespace DatingProgram.Models
         public string Path { get; set; }
         public DateTime DateAdded { get; set; }
 
-        public virtual List<Client> Clients { get; set; } = new();
+        public virtual Client Clients { get; set; }
     }
 }
