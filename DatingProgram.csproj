@@ -13,6 +13,7 @@
     <None Remove="Resource\158722.png" />
     <None Remove="Resource\1640528661_1-abrakadabra-fun-p-serii-chelovek-na-avu-1.png" />
     <None Remove="Resource\4360835.png" />
+    <None Remove="Resource\sysImages\88271.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
     <Resource Include="Resource\sysImages\158722.png" />
     <Resource Include="Resource\sysImages\1640528661_1-abrakadabra-fun-p-serii-chelovek-na-avu-1.png" />
     <Resource Include="Resource\sysImages\4360835.png" />
+    <Resource Include="Resource\sysImages\88271.png" />
   </ItemGroup>
 
   <ItemGroup>

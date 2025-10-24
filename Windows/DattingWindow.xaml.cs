@@ -1,4 +1,5 @@
 ﻿using DatingProgram.Models;
+using DatingProgram.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,11 @@ namespace DatingProgram.Windows
         private void spNotify_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             MainFrame.Navigate(new Pages.NotifictationPage(User));
+        }
+
+        private void spMyPairs_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MainFrame.Navigate(new Pages.MyPairsPage(User));
         }
     }
 }

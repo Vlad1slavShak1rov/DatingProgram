@@ -26,9 +26,14 @@
                     <Label Content="К Анкетам" FontWeight="DemiBold"/>
                 </StackPanel>
 
-                <StackPanel x:Name="spNotify" Cursor="Hand" MouseLeftButtonDown="spNotify_MouseLeftButtonDown" VerticalAlignment="Center">
+                <StackPanel x:Name="spNotify" Margin="10 0 20 0" Cursor="Hand" MouseLeftButtonDown="spNotify_MouseLeftButtonDown" VerticalAlignment="Center">
                     <Image Width="35" Height="35" Source="/Resource/sysImages/107822.png"/>
                     <Label Content="Уведомления" FontWeight="DemiBold"/>
+                </StackPanel>
+
+                <StackPanel x:Name="spMyPairs" Cursor="Hand" MouseLeftButtonDown="spMyPairs_MouseLeftButtonDown" VerticalAlignment="Center">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/88271.png"/>
+                    <Label Content="Мои пары" FontWeight="DemiBold"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

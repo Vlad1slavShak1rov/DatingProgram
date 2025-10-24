@@ -174,34 +174,6 @@ namespace DatingProgram.Migrations
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("DatingProgram.Models.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("Notifications");
-                });
-
             modelBuilder.Entity("DatingProgram.Models.Pair", b =>
                 {
                     b.Property<int>("Id")
@@ -348,17 +320,6 @@ namespace DatingProgram.Migrations
                     b.Navigation("ToUser");
                 });
 
-            modelBuilder.Entity("DatingProgram.Models.Notification", b =>
-                {
-                    b.HasOne("DatingProgram.Models.Client", "Client")
-                        .WithMany("Notifications")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("DatingProgram.Models.Pair", b =>
                 {
                     b.HasOne("DatingProgram.Models.Client", "Women")
@@ -403,8 +364,6 @@ namespace DatingProgram.Migrations
                     b.Navigation("FromClient");
 
                     b.Navigation("ManPairs");
-
-                    b.Navigation("Notifications");
 
                     b.Navigation("ToClient");
 
