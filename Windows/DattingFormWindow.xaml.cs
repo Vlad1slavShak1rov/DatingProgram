@@ -37,6 +37,8 @@ namespace DatingProgram.Windows
         //Пути к изображениям
         List<string> imagePath = new();
 
+        private BitmapImage currentImage;
+
         private Client client;
         public DatingForm DatingForm { get; set;}
         public Characteristic Characteristic { get; set;}
@@ -87,8 +89,8 @@ namespace DatingProgram.Windows
             cbPurposeDating.SelectedItem = cbPurposeDating.Items.Cast<ComboBoxItem>()
                 .FirstOrDefault(i => i.Content.ToString() == DatingForm.PurposeDating);
 
-            if(imagePath.Count >0)
-                myImage.Source = LoadImageWithoutLock(imagePath[0]);
+            if (imagePath.Count > 0)
+                DisplayImage(imagePath[0]);
 
             UpdateTextBlockCounter();
             DataContext = this;
@@ -114,6 +116,25 @@ namespace DatingProgram.Windows
                 pageCounter += 1 *k;
                 SelectPage();
             }
+        }
+        private void DisplayImage(string imagePath)
+        {
+            // Освобождаем предыдущее изображение
+            if (currentImage != null)
+            {
+                currentImage = null;
+            }
+
+            // Очищаем текущее изображение
+            myImage.Source = null;
+
+            // Принудительная сборка мусора
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            // Загружаем новое изображение
+            currentImage = LoadImageWithoutLock(imagePath);
+            myImage.Source = currentImage;
         }
 
         // Выбор страницы для отображения
@@ -346,7 +367,9 @@ namespace DatingProgram.Windows
                     File.WriteAllBytes(destinationFilePath, fileBytes);
 
                     imagePath.Add(destinationFilePath);
-                    myImage.Source = LoadImageWithoutLock(destinationFilePath);
+
+                    imagePageCounter = 0;
+                    DisplayImage(destinationFilePath);
                     UpdateTextBlockCounter();
 
                     MessageBox.Show("Фото успешно добавлено!");
@@ -362,10 +385,10 @@ namespace DatingProgram.Windows
         private void btRightImage_Click(object sender, RoutedEventArgs e)
         {
             if (imagePath.Count == 0) return;
-            Math.Abs(imagePageCounter++);
+            imagePageCounter = (imagePageCounter + 1) % imagePath.Count;
 
             // Обновление источника изображения с учетом количества изображений
-            myImage.Source = LoadImageWithoutLock(imagePath[Math.Abs(imagePageCounter) % imagePath.Count]);
+            DisplayImage(imagePath[imagePageCounter]);
             UpdateTextBlockCounter();
         }
 
@@ -373,45 +396,80 @@ namespace DatingProgram.Windows
         private void btLeftImage_Click(object sender, RoutedEventArgs e)
         {
             if (imagePath.Count == 0) return;
-            Math.Abs(imagePageCounter--);
-            myImage.Source = LoadImageWithoutLock(imagePath[Math.Abs(imagePageCounter) % imagePath.Count]);
+
+            imagePageCounter = (imagePageCounter - 1 + imagePath.Count) % imagePath.Count;
+            DisplayImage(imagePath[imagePageCounter]);
             UpdateTextBlockCounter();
         }
 
         // Событие нажатия кнопки "Удалить фото"
         private void btDeletePhoto_Click(object sender, RoutedEventArgs e)
         {
-            string currentPath = imagePath[imagePageCounter % imagePath.Count];
-            imagePath.Remove(currentPath);
+            if (imagePath.Count == 0) return;
 
-            // Освобождаем файл перед удалением
+            string currentPath = imagePath[imagePageCounter];
+
+            // Освобождаем изображение перед удалением
             myImage.Source = null;
+            if (currentImage != null)
+            {
+                currentImage = null;
+            }
+
+            // Принудительная сборка мусора
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
-            if (File.Exists(currentPath))
-                File.Delete(currentPath);
-
-            using var context = new MyDbContext();
-            var photoToDelete = context.ClientPhotos.FirstOrDefault(cp => cp.ClientId == client.Id && cp.Path == currentPath);
-            if (photoToDelete != null)
+            try
             {
-                context.ClientPhotos.Remove(photoToDelete);
-                context.SaveChanges();
+                /*
+                // Удаляем файл
+                if (File.Exists(currentPath))
+                {
+                    File.Delete(currentPath);
+                }
+                */
+                // Удаляем из списка
+                imagePath.RemoveAt(imagePageCounter);
+
+                // Обновляем счетчик
+                if (imagePath.Count > 0)
+                {
+                    imagePageCounter = Math.Min(imagePageCounter, imagePath.Count - 1);
+                    DisplayImage(imagePath[imagePageCounter]);
+                }
+                else
+                {
+                    imagePageCounter = 0;
+                    myImage.Source = null;
+                }
+
+                // Удаляем из базы данных
+                using var context = new MyDbContext();
+                var photoToDelete = context.ClientPhotos.FirstOrDefault(cp => cp.ClientId == client.Id && cp.Path == currentPath);
+                if (photoToDelete != null)
+                {
+                    context.ClientPhotos.Remove(photoToDelete);
+                    context.SaveChanges();
+                }
+
+                UpdateTextBlockCounter();
+                MessageBox.Show("Фото успешно удалено!");
             }
-
-            // Обновляем изображение
-            if (imagePath.Count > 0)
-                myImage.Source = LoadImageWithoutLock(imagePath[0]);
-            else
-                myImage.Source = null;
-
-            UpdateTextBlockCounter();
+            catch (IOException ioEx)
+            {
+                MessageBox.Show($"Файл занят другим процессом: {ioEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при удалении файла: {ex.Message}");
+            }
         }
 
         // Загрузка изображения без блокировки файла
         private BitmapImage LoadImageWithoutLock(string path)
         {
+            if (!File.Exists(path)) return null;
             var bitmap = new BitmapImage();
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -428,7 +486,7 @@ namespace DatingProgram.Windows
         // Обновление счетчика изображений
         private void UpdateTextBlockCounter()
         {
-            tbCountImagePage.Text = $"{(imagePath.Count == 0 ? 0 : (imagePageCounter % imagePath.Count) + 1)} / {imagePath.Count}";
+            tbCountImagePage.Text = $"{(imagePath.Count == 0 ? 0 : imagePageCounter + 1)} / {imagePath.Count}";
         }
     }
 }

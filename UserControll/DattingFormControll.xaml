@@ -13,7 +13,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Image x:Name="PhotoImage" Width="300" Height="250"  Stretch="Fill"/>
+                <Image x:Name="PhotoImage" Width="300" Height="250" Stretch="Fill"/>
                 <Button x:Name="btPhotoLeft" Content=">" FontSize="20" HorizontalAlignment="Right" Click="btPhotoLeft_Click"/>
                 <Button x:Name="btPhotoRight" Content="&lt;" FontSize="20" HorizontalAlignment="Left" Click="btPhotoRight_Click"/>
             </Grid>

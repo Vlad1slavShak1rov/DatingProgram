@@ -53,15 +53,22 @@ namespace DatingProgram.Pages
 
         private void InitAllProfiles()
         {
+            // Очистка текущих данных
+            spProfile.Children.Clear();
+            profilesPages.Clear();
+
             using var context = new MyDbContext();
-            var clients = context.Client.ToList();
+            var clients = context.Client.Include(c=>c.DatingForm).ToList();
             if(clients.Count > 0)
             {
                 foreach (var c in clients)
                 {
+                    if (c.DatingForm.Count == 0) continue;
+
                     var profilePage = new DattingFormControll(c);
                     profilesPages.Add(profilePage);
                 }
+                spProfile.Children.Add(profilesPages[0]);
             }
             else
             {
@@ -178,10 +185,6 @@ namespace DatingProgram.Pages
 
             if(dattingFormWindow.ShowDialog() == true)
             {
-                // Очистка текущих данных
-                spProfile.Children.Clear();
-                profilesPages.Clear();
-
                 //Повторная инициализация
                 InitAllProfiles();
             }
@@ -191,7 +194,18 @@ namespace DatingProgram.Pages
         // Обработчик события при нажатии на кнопку удалить
         private void btRemoveProfile_Click(object sender, RoutedEventArgs e)
         {
+            // Получаем конкретную анкету
+            var currentDatingForm = profilesPages[profileCounter].DatingForm;
 
+            // Обращаемся к БД и удаляем форму
+            using var context = new MyDbContext();
+            context.DatingForms.Remove(currentDatingForm);
+            context.SaveChanges();
+
+            MessageBox.Show("Анкета удалена!", "Успех", MessageBoxButton.OK);
+
+            //Инициализируем по новой
+            InitAllProfiles();
         }
     }
 }

@@ -55,8 +55,6 @@
 
             <TextBlock Text="Расскажите о себе" FontSize="16" Margin="5 10 0 0"/>
             <TextBox x:Name="tbAboutMe" Text="{Binding DatingForm.Description}" Height="120" Margin="5" TextWrapping="Wrap"/>
-
-
         </StackPanel>
 
         <Grid x:Name="spThird" Visibility="Collapsed">
