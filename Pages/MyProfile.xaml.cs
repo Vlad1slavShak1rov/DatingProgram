@@ -93,7 +93,7 @@ namespace DatingProgram.Pages
 
 
             var context = new MyDbContext();
-            var client = context.Client.FirstOrDefault(c => c.UserId == User.Id);
+            var client = context.Client.Include(c=>c.Characteristic).FirstOrDefault(c => c.UserId == User.Id);
 
             //Если клиента нет, создается новый клиент
             if (client == null)

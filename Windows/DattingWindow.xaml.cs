@@ -27,7 +27,11 @@ namespace DatingProgram.Windows
             InitializeComponent();
 
             User = user;
+            if(user.RoleId == 1) spAdminButtons.Visibility = Visibility.Visible;
+            else spUserButtons.Visibility = Visibility.Visible;
         }
+
+        // ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ ОБЫЧНОГО КЛИЕНТА
 
         private void spMyProfile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -47,6 +51,29 @@ namespace DatingProgram.Windows
         private void spMyPairs_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             MainFrame.Navigate(new Pages.MyPairsPage(User));
+        }
+
+        //ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ АДМИНА
+
+        private void spReports_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void spAllPairs_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void spAllUsers_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        
+        private void spAllProfile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MainFrame.Navigate(new Pages.ViewingProfilesPages(User));
         }
     }
 }

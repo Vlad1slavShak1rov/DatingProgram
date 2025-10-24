@@ -8,14 +8,14 @@
         Title="Приложение Знакомство"  d:DesignHeight="550" d:DesignWidth="800"
         MinHeight="550"
         MinWidth="800" WindowStartupLocation="CenterScreen">   
-    <Grid>
+    <Grid Cursor="">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="6*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="Bisque">
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <Grid Grid.Row="0" Background="Bisque" >
+            <StackPanel x:Name="spUserButtons" Visibility="Collapsed" HorizontalAlignment="Center" Orientation="Horizontal">
                 <StackPanel x:Name="spMyProfile" Cursor="Hand" MouseLeftButtonDown="spMyProfile_MouseLeftButtonDown" VerticalAlignment="Center">
                     <Image Width="35" Height="35" Source="/Resource/sysImages/4360835.png"/>
                     <Label Content="Мой профиль" FontWeight="DemiBold"/>
@@ -34,6 +34,28 @@
                 <StackPanel x:Name="spMyPairs" Cursor="Hand" MouseLeftButtonDown="spMyPairs_MouseLeftButtonDown" VerticalAlignment="Center">
                     <Image Width="35" Height="35" Source="/Resource/sysImages/88271.png"/>
                     <Label Content="Мои пары" FontWeight="DemiBold"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Name="spAdminButtons" Visibility="Collapsed" HorizontalAlignment="Center" Orientation="Horizontal" >
+                <StackPanel x:Name="spAllProfile" Cursor="Hand" VerticalAlignment="Center" MouseLeftButtonDown="spAllProfile_MouseLeftButtonDown">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/158722.png"/>
+                    <Label Content="Все анкеты" FontWeight="DemiBold"/>
+                </StackPanel>
+
+                <StackPanel x:Name="spAllUsers" Cursor="Hand" VerticalAlignment="Center" Margin="10 0 10 0" MouseLeftButtonDown="spAllUsers_MouseLeftButtonDown">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/4360835.png"/>
+                    <Label Content="Все пользователи" FontWeight="DemiBold"/>
+                </StackPanel>
+
+                <StackPanel x:Name="spAllPairs" Cursor="Hand" VerticalAlignment="Center" Margin="0 0 10 0" MouseLeftButtonDown="spAllPairs_MouseLeftButtonDown">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/88271.png"/>
+                    <Label Content="Все пары" FontWeight="DemiBold" Cursor=""/>
+                </StackPanel>
+
+                <StackPanel x:Name="spReports" Cursor="Hand" VerticalAlignment="Center" MouseLeftButtonDown="spReports_MouseLeftButtonDown">
+                    <Image Width="35" Height="35" Source="/Resource/sysImages/88271.png"/>
+                    <Label Content="Отчеты" FontWeight="DemiBold"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

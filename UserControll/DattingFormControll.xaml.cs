@@ -39,7 +39,14 @@ namespace DatingProgram.UserControll
             Client = client;
             this.user = user;
             btLike.Visibility = visibleBut;
+            InitData();
+        }
 
+        public DattingFormControll(Client client)
+        {
+            InitializeComponent();
+            Client = client;
+            btLike.Visibility = Visibility.Collapsed;
             InitData();
         }
 
@@ -53,6 +60,8 @@ namespace DatingProgram.UserControll
                 .Select(cp => cp.Path)
                 .ToList();
 
+            if(imagePath.Count > 0) 
+                PhotoImage.Source = new BitmapImage(new Uri(imagePath[0]));
 
             DataContext = this;
         }

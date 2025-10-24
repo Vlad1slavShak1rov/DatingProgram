@@ -1,6 +1,7 @@
 ﻿using DatingProgram.DB;
 using DatingProgram.Models;
 using DatingProgram.UserControll;
+using DatingProgram.Windows;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,37 @@ namespace DatingProgram.Pages
         public ViewingProfilesPages(User user)
         {
             InitializeComponent();
-            InitData(user.Id);
+            if(user.RoleId == 1)
+            {
+                spAdminButtons.Visibility = Visibility.Visible;
+                btChangedProfile.Visibility = Visibility.Collapsed;
+                isAutorizate = true;
+                InitAllProfiles();
+            }
+            else
+            {
+                InitData(user.Id);
+            }
+        }
+
+
+        private void InitAllProfiles()
+        {
+            using var context = new MyDbContext();
+            var clients = context.Client.ToList();
+            if(clients.Count > 0)
+            {
+                foreach (var c in clients)
+                {
+                    var profilePage = new DattingFormControll(c);
+                    profilesPages.Add(profilePage);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Нет доступных анкет для просмотра!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
         }
 
         // Инициализация данных
@@ -137,6 +168,30 @@ namespace DatingProgram.Pages
                 // Обновление локальной переменной анкеты
                 datingForm = dattingFormWindow.DatingForm;
             }
+        }
+
+        // Обработчик события при нажатии на кнопку редактировать
+        private void btEditProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var currentProfile = profilesPages[profileCounter].Client;
+            DattingFormWindow dattingFormWindow = new(currentProfile);
+
+            if(dattingFormWindow.ShowDialog() == true)
+            {
+                // Очистка текущих данных
+                spProfile.Children.Clear();
+                profilesPages.Clear();
+
+                //Повторная инициализация
+                InitAllProfiles();
+            }
+
+        }
+
+        // Обработчик события при нажатии на кнопку удалить
+        private void btRemoveProfile_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -26,32 +26,40 @@ namespace DatingProgram.DB
         public DbSet<Pair> Pairs { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+
+        // Настройка модели данных и связей между сущностями
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Настройка начальных данных для ролей пользователей
             modelBuilder.Entity<Role>()
                 .HasData
                 (
                     new Role { Id = 1, Name = "Администратор"},
                     new Role { Id = 2, Name = "Клиент"}
                 );
+
+            // Настройка связей между сущностями Likes и User
             modelBuilder.Entity<Likes>()
                 .HasOne(l => l.FromUser)
                 .WithMany(u=>u.FromClient)
                 .HasForeignKey(l => l.FromUserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Настройка связей между сущностями Likes и User
             modelBuilder.Entity<Likes>()
                 .HasOne(l => l.ToUser)
                 .WithMany(u => u.ToClient)
                 .HasForeignKey(l => l.ToUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // Настройка связей между сущностями Pair и Client
             modelBuilder.Entity<Pair>()
                 .HasOne(p => p.Man)
                 .WithMany(c => c.ManPairs)
                 .HasForeignKey(p => p.ManId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Настройка связей между сущностями Pair и Client
             modelBuilder.Entity<Pair>()
                 .HasOne(p => p.Women)
                 .WithMany(c => c.WomanPairs)

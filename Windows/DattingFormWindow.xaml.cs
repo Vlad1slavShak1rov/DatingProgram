@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace DatingProgram.Windows
 {
@@ -200,16 +201,24 @@ namespace DatingProgram.Windows
 
             if (existCharacteristic == null)
             {
-                existCharacteristic = new Characteristic();
+                existCharacteristic = new Characteristic()
+                {
+                    City = city,
+                    Gender = gender,
+                    Age = ageValue,
+                };
                 context.Characteristics.Add(existCharacteristic);
                 context.SaveChanges();
                 existClient.CharacteristicId = existCharacteristic.Id;
             }
+            else
+            {
+                // Обновляем поля характеристики
+                existCharacteristic.Age = ageValue;
+                existCharacteristic.City = city;
+                existCharacteristic.Gender = gender;
+            }
 
-            // Обновляем поля характеристики
-            existCharacteristic.Age = ageValue;
-            existCharacteristic.City = city;
-            existCharacteristic.Gender = gender;
 
             // Получаем анкету (если есть)
             var existForm = context.DatingForms.FirstOrDefault(df => df.ClientId == client.Id);
@@ -222,7 +231,6 @@ namespace DatingProgram.Windows
                 };
                 context.DatingForms.Add(existForm);
             }
-
             // Обновляем поля анкеты
             existForm.MinAge = ageMinValue;
             existForm.MaxAge = ageMaxValue;
@@ -319,34 +327,29 @@ namespace DatingProgram.Windows
 
             if (result == true)
             {
-                // получаем корень проекта
-                string projectRoot = System.IO.Path.GetFullPath(
-                    System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")
-                );
+                string projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
+                string resourceFolderPath = Path.Combine(projectRoot, $"Resource", $"MyProfile_{client.Id}");
 
-                // путь к папке Resource в корне проекта
-                string resourceFolderPath = System.IO.Path.Combine(projectRoot, $"Resource", $"MyProfile_{client.Id}");
-
-                // создаем папку если не существует
                 if (!Directory.Exists(resourceFolderPath))
-                {
                     Directory.CreateDirectory(resourceFolderPath);
-                }
 
-                // копируем выбранный файл в папку Resource
                 string selectedFilePath = dlg.FileName;
-                string fileName = System.IO.Path.GetFileName(selectedFilePath);
-                string destinationFilePath = System.IO.Path.Combine(resourceFolderPath, fileName);
+                string fileName = Path.GetFileName(selectedFilePath);
+                string destinationFilePath = Path.Combine(resourceFolderPath, fileName);
 
-                // Копирование файла с обработкой ошибок
                 try
                 {
-                    File.Copy(selectedFilePath, destinationFilePath, true);
-                    MessageBox.Show("Фото успешно добавлено!");
+                    // Используем временный MemoryStream, чтобы освободить исходный файл
+                    byte[] fileBytes = File.ReadAllBytes(selectedFilePath);
+
+                    // Перезаписываем
+                    File.WriteAllBytes(destinationFilePath, fileBytes);
 
                     imagePath.Add(destinationFilePath);
-                    myImage.Source = LoadImageWithoutLock(imagePath[imagePath.Count - 1]);
+                    myImage.Source = LoadImageWithoutLock(destinationFilePath);
                     UpdateTextBlockCounter();
+
+                    MessageBox.Show("Фото успешно добавлено!");
                 }
                 catch (Exception ex)
                 {
@@ -381,17 +384,13 @@ namespace DatingProgram.Windows
             string currentPath = imagePath[imagePageCounter % imagePath.Count];
             imagePath.Remove(currentPath);
 
-            // Обновление отображаемого изображения после удаления
-            if (imagePath.Count > 0)
-            {
-                myImage.Source = LoadImageWithoutLock(imagePath[0]);
-            }
-            else
-            {
-                myImage.Source = null;
-            }
+            // Освобождаем файл перед удалением
+            myImage.Source = null;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
-            File.Delete(currentPath);
+            if (File.Exists(currentPath))
+                File.Delete(currentPath);
 
             using var context = new MyDbContext();
             var photoToDelete = context.ClientPhotos.FirstOrDefault(cp => cp.ClientId == client.Id && cp.Path == currentPath);
@@ -401,6 +400,11 @@ namespace DatingProgram.Windows
                 context.SaveChanges();
             }
 
+            // Обновляем изображение
+            if (imagePath.Count > 0)
+                myImage.Source = LoadImageWithoutLock(imagePath[0]);
+            else
+                myImage.Source = null;
 
             UpdateTextBlockCounter();
         }
