@@ -27,7 +27,7 @@ namespace DatingProgram.Pages
         public NotifictationPage(User user)
         {
             InitializeComponent();
-            client = new MyDbContext().Client.Find(user.Id);
+            client = new MyDbContext().Client.FirstOrDefault(c=>c.UserId == user.Id);
 
             InitData();
         }

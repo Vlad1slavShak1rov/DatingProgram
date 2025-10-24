@@ -26,6 +26,7 @@ namespace DatingProgram.DB
         public DbSet<Pair> Pairs { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Logs> Logs { get; set; }
 
         // Настройка модели данных и связей между сущностями
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,8 +35,14 @@ namespace DatingProgram.DB
             modelBuilder.Entity<Role>()
                 .HasData
                 (
-                    new Role { Id = 1, Name = "Администратор"},
-                    new Role { Id = 2, Name = "Клиент"}
+                    new Role { Id = 1, Name = "Администратор" },
+                    new Role { Id = 2, Name = "Клиент" }
+                );
+
+            modelBuilder.Entity<User>()
+                .HasData
+                (
+                    new User { Id = 1, AvatarPath = string.Empty, Login = "admin", Password = "admin", RoleId = 1}
                 );
 
             // Настройка связей между сущностями Likes и User

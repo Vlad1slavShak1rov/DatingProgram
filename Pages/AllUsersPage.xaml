@@ -15,12 +15,14 @@
                 <Button x:Name="btRemove" Content="Удалить"  Margin="0 10" Click="btRemove_Click"/>
             </StackPanel>
 
-            <DataGrid x:Name="dgAllUsers" ItemsSource="{Binding Client}" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid x:Name="dgAllUsers" ItemsSource="{Binding Clients}" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DataGrid_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*"/>
-                    <DataGridTextColumn Header="Логин" Binding="{Binding User.Login}" Width="*"/>
-                    <DataGridTextColumn Header="Пароль" Binding="{Binding User.Password}" Width="*"/>
-                    <DataGridTextColumn Header="ID Аккаунта" Binding="{Binding User.Id}" Width="*"/>
+                    <DataGridTextColumn Header="Логин" Binding="{Binding Users.Login}" Width="*"/>
+                    <DataGridTextColumn Header="Пароль" Binding="{Binding Users.Password}" Width="*"/>
+                    <DataGridTextColumn Header="ID Аккаунта" Binding="{Binding Users.Id}" Width="*"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="*"/>
+                    <DataGridTextColumn Header="Фамилия" Binding="{Binding SecondName}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

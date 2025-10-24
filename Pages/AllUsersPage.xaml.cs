@@ -1,10 +1,12 @@
 ﻿using DatingProgram.DB;
 using DatingProgram.Models;
+using DatingProgram.Windows;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,9 +38,11 @@ namespace DatingProgram.Pages
             DataContext = null;
 
             using var context = new MyDbContext();
-            Clients = context.Client.Include(c => c.DatingForm).ToList();
-
-            DataContext = Clients;
+            Clients = context.Client
+            .Include(c => c.Users) 
+            .Include(c => c.DatingForm)
+            .ToList();
+            DataContext = this;
         }
 
         //Обработчик события считывание выбранного пользователя
@@ -59,7 +63,12 @@ namespace DatingProgram.Pages
         {
             if (selectedClient == null) return;
 
-
+            ChangeUserCredentialsWindow changeUserCredentialsWindow = new(selectedClient.Id);
+            var res = changeUserCredentialsWindow.ShowDialog();
+            if (res == true)
+            {
+                InitData();
+            }
         }
 
         //Обработчик события удаления пользователя

@@ -1,0 +1,39 @@
+﻿<Page x:Class="DatingProgram.Pages.AllPairsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DatingProgram.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AllPairsPage">
+
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton x:Name="rbAllTime" Content="За все время" IsChecked="True" Checked="rbAllTime_Checked"/>
+                <RadioButton x:Name="rbCurrentDate" Content="За определенный период" Margin="10 0" IsChecked="False" Checked="rbCurrentDate_Checked"/>
+            </StackPanel>
+            
+            <StackPanel x:Name="spDate">
+                <StackPanel Orientation="Horizontal" Margin="0 10">
+                    <Label Content="От"/>
+                    <DatePicker x:Name="dpFromDate" SelectedDateChanged="dpFromDate_SelectedDateChanged"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0 10">
+                    <Label Content="До"/>
+                    <DatePicker x:Name="dpToDate" SelectedDateChanged="dpToDate_SelectedDateChanged"/>
+                </StackPanel>
+            </StackPanel>
+          
+            <DataGrid x:Name="dgAllPairs" ItemsSource="{Binding Pairs}" SelectionChanged="dgAllPairs_SelectionChanged" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ФИО Партнера 1" Binding="{Binding Man.FullName}" Width="*"/>
+                    <DataGridTextColumn Header="ФИО Партнера 2" Binding="{Binding Women.FullName}" Width="*"/>
+                    <DataGridTextColumn Header="Статус отношений" Binding="{Binding PairStatus}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -20,7 +20,7 @@
 
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" >
             <Grid>
-                <StackPanel x:Name="spAdminButtons" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <StackPanel x:Name="spAdminButtons" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Collapsed">
                     <Button x:Name="btEditProfile" Content="Изменить данную анкету" Margin="0 10" Width="175" Height="30" Click="btEditProfile_Click"/>
                     <Button x:Name="btRemoveProfile" Content="Удалить данную анкету" Width="175" Height="30" Click="btRemoveProfile_Click"/>
                 </StackPanel>

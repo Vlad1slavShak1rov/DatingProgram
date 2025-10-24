@@ -68,7 +68,8 @@ namespace DatingProgram.Pages
                     var profilePage = new DattingFormControll(c);
                     profilesPages.Add(profilePage);
                 }
-                spProfile.Children.Add(profilesPages[0]);
+                if(profilesPages.Count > 0)
+                    spProfile.Children.Add(profilesPages[0]);
             }
             else
             {

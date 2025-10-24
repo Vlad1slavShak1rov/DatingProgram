@@ -57,17 +57,17 @@ namespace DatingProgram.Windows
 
         private void spReports_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            MainFrame.Navigate(new Pages.LogsPage());
         }
 
         private void spAllPairs_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            MainFrame.Navigate(new Pages.AllPairsPage());
         }
 
         private void spAllUsers_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            MainFrame.Navigate(new Pages.AllUsersPage());
         }
 
         

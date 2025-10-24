@@ -37,13 +37,15 @@ namespace DatingProgram.Windows
                     context.SaveChanges();
 
                     MessageBox.Show("Данные обновлены!");
-                    this.Close();
                 }
             }
             catch
             {
                 MessageBox.Show("Ошибка сохранения!");
             }
+
+            this.DialogResult = true;
+            this.Close();
         }
 
         private void btCancel_Click(object sender, RoutedEventArgs e)

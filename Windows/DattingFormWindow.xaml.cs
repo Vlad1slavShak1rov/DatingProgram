@@ -46,10 +46,15 @@ namespace DatingProgram.Windows
         bool IsUpdate;
         public DattingFormWindow(Client client, bool isUpdate = false)
         {
+            if(client == null)
+            {
+                MessageBox.Show("Вы не авторизованы в системе!", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             InitializeComponent();
 
             this.client = client;
-            IsUpdate = isUpdate;
 
             using var context = new MyDbContext();
             DatingForm = context.DatingForms.FirstOrDefault(d => d.ClientId == client.Id);
