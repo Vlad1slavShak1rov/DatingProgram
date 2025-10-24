@@ -147,8 +147,10 @@ namespace DatingProgram.Pages
             {
                 MessageBox.Show("У вас не создана анкета. Сейчас вы будете перенаправлены на страницу создания анкеты.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            
+            bool update = form is not null;
 
-            DattingFormWindow dattingFormWindow = new DattingFormWindow(Client);
+            DattingFormWindow dattingFormWindow = new DattingFormWindow(Client, update);
             dattingFormWindow.ShowDialog();
         }
 

@@ -40,7 +40,7 @@ namespace DatingProgram.Windows
 
         private void spNotify_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("3");
+            MainFrame.Navigate(new Pages.NotifictationPage(User));
         }
     }
 }

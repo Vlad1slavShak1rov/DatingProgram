@@ -9,18 +9,21 @@
       Title="ViewingProfilesPages">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 
         <Grid Grid.Row="0">
-            <StackPanel x:Name="spProfile"/>
+            <StackPanel x:Name="spProfile" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
             <Grid>
-                <Button x:Name="btNextProfile" Content="Следующая анкета" Width="150" Height="30" Click="btNextProfile_Click"  />
+                <StackPanel VerticalAlignment="Center">
+                    <Button x:Name="btChangedProfile" Content="Изменить анкету" Width="150" Height="30" Margin="0 15" Click="btChangedProfile_Click"/>
+                    <Button x:Name="btNextProfile" Content="Следующая анкета" Width="150" Height="30" Click="btNextProfile_Click"  />
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

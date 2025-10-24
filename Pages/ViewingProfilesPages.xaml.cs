@@ -1,6 +1,7 @@
 ﻿using DatingProgram.DB;
 using DatingProgram.Models;
 using DatingProgram.UserControll;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,22 +26,25 @@ namespace DatingProgram.Pages
     {
 
         List<DattingFormControll> profilesPages = new();
+
         Client client;
+        Models.DatingForm datingForm;
+
 
         int profileCounter = 0;
         bool isAutorizate = false;
         public ViewingProfilesPages(User user)
         {
             InitializeComponent();
-            InitData(user);
+            InitData(user.Id);
         }
 
         // Инициализация данных
-        private void InitData(User user)
+        private void InitData(int userId)
         {
             // Получение клиента из базы данных
             using var context = new MyDbContext();
-            client = context.Client.FirstOrDefault(c=>c.UserId == user.Id);
+            client = context.Client.Include(c=>c.Characteristic).FirstOrDefault(c=>c.UserId == userId);
 
             // Проверка на существование клиента
             if (client == null)
@@ -49,10 +53,10 @@ namespace DatingProgram.Pages
                 return;
             }
             // Получение анкеты пользователя
-            var datingProfile = context.DatingForms.FirstOrDefault(df=>df.ClientId == client.Id);
+            datingForm = context.DatingForms.FirstOrDefault(df=>df.ClientId == client.Id);
 
             // Проверка на существование анкеты
-            if (datingProfile == null)
+            if (datingForm == null)
             {
                 MessageBox.Show("Вы не зарегистрировали свою анкету!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -60,19 +64,28 @@ namespace DatingProgram.Pages
             isAutorizate = true;
 
             // Получение всех клиентов, кроме текущего пользователя
-            var clients = context.Client.Where(c=>c.Id != client.Id).ToList();
+            var clients = context.Client.Where(c=>c.Id != client.Id).Include(c=>c.Characteristic).ToList();
 
             // Создание страницы профиля для каждого клиента
             foreach (var cl in clients)
             {
                 var profilePage = new DattingFormControll(cl, client);
+
+                // Фильтрация анкет на основе предпочтений пользователя в анкете
+                if (profilePage.DatingForm == null || 
+                    datingForm.MinAge > profilePage.Characteristic.Age || profilePage.Characteristic.Age > datingForm.MaxAge 
+                    || client.Characteristic.Gender == profilePage.Characteristic.Gender)
+                    continue;
+
                 profilesPages.Add(profilePage);
             }
-            if(profilesPages.Count == 0)
+            
+            if (profilesPages.Count == 0)
             {
                 MessageBox.Show("Нет доступных анкет для просмотра!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+            // Отображение первой анкеты
             spProfile.Children.Add(profilesPages[0]);
         }
 
@@ -84,6 +97,8 @@ namespace DatingProgram.Pages
         // Переход к следующему профилю 
         private void NextProfile()
         {
+            if (profilesPages.Count == 0) return;
+            // Проверка на авторизацию пользователя
             if (!isAutorizate)
             {
                 MessageBox.Show("Добавите свой анкету!");
@@ -101,7 +116,27 @@ namespace DatingProgram.Pages
 
             spProfile.Children.Clear();
             spProfile.Children.Add(profilesPages[profileCounter]);
+        }
+        // Изменения профиля во время просмотра анкет
+        private void btChangedProfile_Click(object sender, RoutedEventArgs e)
+        {
+            // Запуск окна своей анкеты для изменения
+            Windows.DattingFormWindow dattingFormWindow = new(client);
 
+            var res = dattingFormWindow.ShowDialog();
+            // Обновление данных после изменения анкеты
+            if (res == true)
+            {
+                // Очистка текущих данных
+                spProfile.Children.Clear();
+                profilesPages.Clear();
+
+                // Повторная инициализация данных
+                InitData(client.UserId);
+
+                // Обновление локальной переменной анкеты
+                datingForm = dattingFormWindow.DatingForm;
+            }
         }
     }
 }

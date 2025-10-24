@@ -29,7 +29,5 @@ namespace DatingProgram.Models
         public virtual List<ClientPhoto> ClientPhotos { get; set; }
         public virtual List<Likes> FromClient { get; set; }
         public virtual List<Likes> ToClient { get; set; }
-        public virtual List<Notification> Notifications { get; set; }
-
     }
 }

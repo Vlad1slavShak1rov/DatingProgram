@@ -39,17 +39,21 @@ namespace DatingProgram.Windows
         private Client client;
         public DatingForm DatingForm { get; set;}
         public Characteristic Characteristic { get; set;}
-        public DattingFormWindow(Client client)
+
+        bool IsUpdate;
+        public DattingFormWindow(Client client, bool isUpdate = false)
         {
             InitializeComponent();
 
             this.client = client;
+            IsUpdate = isUpdate;
 
             using var context = new MyDbContext();
-            DatingForm = context.DatingForms.FirstOrDefault(d=>d.ClientId == client.Id);
+            DatingForm = context.DatingForms.FirstOrDefault(d => d.ClientId == client.Id);
 
             // Загрузка данных анкеты, если она уже существует
             if (DatingForm != null) LoadData(context);
+            IsUpdate = isUpdate;
         }
 
         // Загрузка данных анкеты из БД
@@ -137,111 +141,113 @@ namespace DatingProgram.Windows
         // Событие нажатия кнопки "Сохранить" в форме знакомств 
         private void btSave_Click(object sender, RoutedEventArgs e)
         {
-            // Сбор данных из формы
             string age = tbAge.Text;
             string gender = rbMale.IsChecked == true ? "Мужчина" : "Женщина";
             string minAge = tbMinAge.Text;
             string maxAge = tbMaxAge.Text;
             string city = tbCity.Text;
             string description = tbAboutMe.Text;
-            string purposeDating = (cbPurposeDating.SelectedItem as ComboBoxItem).Content.ToString();
+            string purposeDating = (cbPurposeDating.SelectedItem as ComboBoxItem)?.Content.ToString();
 
             // Проверка заполнения всех полей
-            if (string.IsNullOrEmpty(age) || string.IsNullOrWhiteSpace(minAge) 
-               || string.IsNullOrEmpty(maxAge) || string.IsNullOrWhiteSpace(city) 
-               || string.IsNullOrEmpty(city) || string.IsNullOrWhiteSpace(description) )
+            if (string.IsNullOrEmpty(age) || string.IsNullOrEmpty(minAge) ||
+                string.IsNullOrEmpty(maxAge) || string.IsNullOrEmpty(city) ||
+                string.IsNullOrEmpty(description))
             {
                 MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Проверка корректности введенных значений
-            int ageValue, ageMaxValue, ageMinValue;
-            if(!int.TryParse(age, out ageValue) || !int.TryParse(minAge, out ageMinValue) 
-               || !int.TryParse(maxAge, out ageMaxValue))
+            // Проверка корректности возрастов
+            if (!int.TryParse(age, out int ageValue) ||
+                !int.TryParse(minAge, out int ageMinValue) ||
+                !int.TryParse(maxAge, out int ageMaxValue))
             {
-                MessageBox.Show("Пожалуйста, введите корректные числовые значения для возраста.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Введите корректные числовые значения возраста.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 ShowFirstPage();
                 return;
             }
 
-            // Проверка возрастных ограничений
             if (ageValue < 18)
             {
                 MessageBox.Show("Возраст должен быть не менее 18 лет.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                ShowFirstPage();
                 return;
             }
 
-            // Проверка диапазона возраста для поиска
             if (ageMinValue < 18 || ageMaxValue < 18 || ageMinValue > ageMaxValue)
             {
-                ShowSecondPage();
-                MessageBox.Show("Пожалуйста, введите корректные значения для диапазона возраста.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Некорректный диапазон возраста для поиска.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Проверка наличия хотя бы одного изображения
-            if (imagePath.IsNullOrEmpty())
+            if (imagePath == null || imagePath.Count == 0)
             {
-                MessageBox.Show("Пожалуйста, добавьте хотя бы одно изображение.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Добавьте хотя бы одно фото.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
-            // Сохранение данных формы знакомств
 
             using var context = new MyDbContext();
 
-            //Получаем клиента с отслеживанием
             var existClient = context.Client.FirstOrDefault(c => c.Id == client.Id);
-
             if (existClient == null)
             {
-                MessageBox.Show("Клиент не найден в базе данных!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Клиент не найден!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            //Создаём характеристику
-            var characteristic = new Characteristic
+            // Получаем характеристику (если уже есть)
+            var existCharacteristic = context.Characteristics.FirstOrDefault(c => c.Id == existClient.CharacteristicId);
+
+            if (existCharacteristic == null)
             {
-                Age = ageValue,
-                City = city,
-                Gender = gender
-            };
+                existCharacteristic = new Characteristic();
+                context.Characteristics.Add(existCharacteristic);
+                context.SaveChanges();
+                existClient.CharacteristicId = existCharacteristic.Id;
+            }
 
-            //Добавляем характеристику и сохраняем
-            context.Characteristics.Add(characteristic);
-            context.SaveChanges();
+            // Обновляем поля характеристики
+            existCharacteristic.Age = ageValue;
+            existCharacteristic.City = city;
+            existCharacteristic.Gender = gender;
 
-            //Привязываем к клиенту
-            existClient.CharacteristicId = characteristic.Id;
-            context.SaveChanges();
-
-            //Создаём анкету
-            var datingForm = new DatingForm
+            // Получаем анкету (если есть)
+            var existForm = context.DatingForms.FirstOrDefault(df => df.ClientId == client.Id);
+            if (existForm == null)
             {
-                Client = existClient,
-                MinAge = ageMinValue,
-                MaxAge = ageMaxValue,
-                Description = description,
-                PurposeDating = purposeDating,
-                DateCreated = DateTime.Now.Date
-            };
-            context.DatingForms.Add(datingForm);
+                existForm = new DatingForm
+                {
+                    ClientId = existClient.Id,
+                    DateCreated = DateTime.Now.Date
+                };
+                context.DatingForms.Add(existForm);
+            }
 
-            //Добавляем фото
+            // Обновляем поля анкеты
+            existForm.MinAge = ageMinValue;
+            existForm.MaxAge = ageMaxValue;
+            existForm.Description = description;
+            existForm.PurposeDating = purposeDating;
+
+            // Удаляем старые фото клиента и добавляем новые
+            var oldPhotos = context.ClientPhotos.Where(cp => cp.ClientId == client.Id).ToList();
+            context.ClientPhotos.RemoveRange(oldPhotos);
+
             foreach (var path in imagePath)
             {
                 context.ClientPhotos.Add(new ClientPhoto
                 {
-                    ClientId = existClient.Id,
+                    ClientId = client.Id,
                     Path = path,
-                    DateAdded = DateTime.Now.Date,
+                    DateAdded = DateTime.Now.Date
                 });
             }
 
             context.SaveChanges();
             MessageBox.Show("Анкета успешно сохранена!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            DatingForm = existForm;
+            this.DialogResult = true;
             this.Close();
         }
 
@@ -304,6 +310,7 @@ namespace DatingProgram.Windows
             }
         }
 
+        // Событие нажатия кнопки "Добавить фото"
         private void btAddPhoto_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new Microsoft.Win32.OpenFileDialog();
@@ -414,6 +421,7 @@ namespace DatingProgram.Windows
             return bitmap;
         }
 
+        // Обновление счетчика изображений
         private void UpdateTextBlockCounter()
         {
             tbCountImagePage.Text = $"{(imagePath.Count == 0 ? 0 : (imagePageCounter % imagePath.Count) + 1)} / {imagePath.Count}";

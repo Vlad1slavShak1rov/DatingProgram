@@ -1,5 +1,6 @@
 ﻿using DatingProgram.DB;
 using DatingProgram.Models;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +33,13 @@ namespace DatingProgram.UserControll
 
         private List<string> imagePath = new();
         int imagePageCounter = 0;
-        public DattingFormControll(Client client, Client user)
+        public DattingFormControll(Client client, Client user, Visibility visibleBut = Visibility.Visible)
         {
             InitializeComponent();
             Client = client;
             this.user = user;
+            btLike.Visibility = visibleBut;
+
             InitData();
         }
 
@@ -75,6 +78,15 @@ namespace DatingProgram.UserControll
 
         private void btLike_Click(object sender, RoutedEventArgs e)
         {
+            var existingLike = new MyDbContext().Likes
+                .FirstOrDefault(l => l.FromUserId == user.Id && l.ToUserId == Client.Id);
+
+            if (existingLike != null)
+            {
+                MessageBox.Show("Вы уже отправляли лайк этому пользователю!", "Лайк", MessageBoxButton.OK);
+                return;
+            }
+
             var likes = new Likes()
             {
                 FromUserId = user.Id,
@@ -83,17 +95,8 @@ namespace DatingProgram.UserControll
                 LikesStatus = Enums.LikesStatus.Отправлено
             };
 
-            var notification = new Notification()
-            {
-                ClientId = Client.Id,
-                Message = $"Пользователь {user.FirstName} {user.LastName} отправил вам симпатию.",
-                CreatedAt = DateTime.Now,
-                IsRead = false
-            };
-
             using var context = new MyDbContext();
 
-            context.Notifications.Add(notification);
             context.Likes.Add(likes);
             context.SaveChanges();
 

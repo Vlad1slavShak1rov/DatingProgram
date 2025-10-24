@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="DatingProgram.UserControll.NotificationControll"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DatingProgram.UserControll"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="400">
+    <Grid>
+        <StackPanel>
+            <StackPanel>
+                <TextBlock Margin="5 0" FontWeight="DemiBold" FontSize="16">
+         <Run Text="Уведомление от: "/>
+         <Run Text="{Binding Likes.Created}"/>
+                </TextBlock>
+
+                <TextBlock Margin="5 0" TextWrapping="Wrap" Text="{Binding Message}"/>
+            </StackPanel>
+
+            <StackPanel x:Name="spNewMatch" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Visible">
+                <Button x:Name="btCheckProfile" Content="Просмотреть анкету" Width="150" Margin="0 10" Click="btCheckProfile_Click"/>
+                <Button x:Name="btAddSymp" Content="Отправить симпатию" Width="150" Click="btAddSymp_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
